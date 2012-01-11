@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<objects>
+<!-- ('', 'zport', 'dmd', 'Devices', 'Server', 'rrdTemplates', 'NrpeComponent') -->
+<object id='/zport/dmd/Devices/Server/rrdTemplates/NrpeComponent' module='Products.ZenModel.RRDTemplate' class='RRDTemplate'>
+<property type="string" id="targetPythonClass" mode="w" >
+ZenPacks.community.zenNrpeComponent.NrpeComponent
+</property>
+<tomanycont id='datasources'>
+<object id='check-nrpe' module='Products.ZenModel.BasicDataSource' class='BasicDataSource'>
+<property select_variable="sourcetypes" type="selection" id="sourcetype" mode="w" >
+COMMAND
+</property>
+<property type="boolean" id="enabled" mode="w" >
+True
+</property>
+<property type="string" id="component" mode="w" >
+${here/nrpeEventComponent}
+</property>
+<property type="string" id="eventClass" mode="w" >
+/Cmd/Fail
+</property>
+<property type="string" id="eventKey" mode="w" >
+Remote Nagios Plugin
+</property>
+<property type="int" id="severity" mode="w" >
+3
+</property>
+<property type="string" id="commandTemplate" mode="w" >
+${here/ZenPackManager/packs/ZenPacks.community.zenNrpeComponent/path}/libexec/check-nrpe-wrapper.sh "${here/nrpeHost}" "${here/nrpeSSL}" "${here/nrpeFlag}" "${here/nrpeCommand}" "${here/nrpeArgs}"
+</property>
+<property type="int" id="cycletime" mode="w" >
+300
+</property>
+<property type="boolean" id="usessh" mode="w" >
+False
+</property>
+<property type="string" id="parser" mode="w" >
+Auto
+</property>
+</object>
+</tomanycont>
+</object>
+</objects>
