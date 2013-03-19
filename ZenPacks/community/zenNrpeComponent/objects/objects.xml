@@ -1,41 +1,62 @@
 <?xml version="1.0"?>
 <objects>
-<!-- ('', 'zport', 'dmd', 'Devices', 'Server', 'rrdTemplates', 'NrpeComponent') -->
-<object id='/zport/dmd/Devices/Server/rrdTemplates/NrpeComponent' module='Products.ZenModel.RRDTemplate' class='RRDTemplate'>
+<!-- ('', 'zport', 'dmd', 'Devices', 'rrdTemplates', 'NrpeComponent') -->
+<object id='/zport/dmd/Devices/rrdTemplates/NrpeComponent' module='Products.ZenModel.RRDTemplate' class='RRDTemplate'>
 <property type="string" id="targetPythonClass" mode="w" >
 ZenPacks.community.zenNrpeComponent.NrpeComponent
 </property>
 <tomanycont id='datasources'>
-<object id='check-nrpe' module='Products.ZenModel.BasicDataSource' class='BasicDataSource'>
+<object id='checkNRPE' module='ZenPacks.community.zenNrpeComponent.datasources.NrpeComponentDataSource' class='NrpeComponentDataSource'>
 <property select_variable="sourcetypes" type="selection" id="sourcetype" mode="w" >
-COMMAND
+NrpeComponent
 </property>
 <property type="boolean" id="enabled" mode="w" >
 True
 </property>
 <property type="string" id="component" mode="w" >
-${here/nrpeEventComponent}
+${here/eventComponent}
 </property>
 <property type="string" id="eventClass" mode="w" >
 /Cmd/Fail
 </property>
 <property type="string" id="eventKey" mode="w" >
-Remote Nagios Plugin
+${here/eventKey}
 </property>
 <property type="int" id="severity" mode="w" >
 3
 </property>
-<property type="string" id="commandTemplate" mode="w" >
-${here/ZenPackManager/packs/ZenPacks.community.zenNrpeComponent/path}/libexec/check-nrpe-wrapper.sh "${here/nrpeHost}" "${here/nrpeSSL}" "${here/nrpeFlag}" "${here/nrpeCommand}" "${here/nrpeArgs}"
+<property type="int" id="cycletime" mode="w" >
+300
 </property>
 <property type="int" id="cycletime" mode="w" >
 300
 </property>
-<property type="boolean" id="usessh" mode="w" >
-False
+<property type="string" id="hostname" mode="w" >
+${here/hostname}
 </property>
-<property type="string" id="parser" mode="w" >
-Auto
+<property type="boolean" id="treatTimeout" mode="w" >
+${here/treatTimeout}
+</property>
+<property type="boolean" id="ssl" mode="w" >
+${here/ssl}
+</property>
+<property type="string" id="eventComponent" mode="w" >
+${here/eventComponent}
+</property>
+<property type="string" id="command" mode="w" >
+${here/command}
+</property>
+<property type="string" id="eventKey" mode="w" >
+${here/eventKey}
+</property>
+<property type="string" id="timeout" mode="w" >
+60
+</property>
+<property type="string" id="arglist" mode="w" >
+${here/arglist}
+</property>
+<property type="string" id="port" mode="w" >
+${here/port}
 </property>
 </object>
 </tomanycont>

@@ -1,61 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:zcml="http://namespaces.zope.org/zcml">
+    <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:browser="http://namespaces.zope.org/browser"
+        xmlns:zcml="http://namespaces.zope.org/zcml">
+        <configure zcml:condition="installed Products.Zuul">
 
-	<configure zcml:condition="installed Products.Zuul">
-		
-		<!-- Component Info -->
-		<adapter factory=".info.NrpeComponentInfo"
-			for=".NrpeComponent.NrpeComponent"
-			provides=".interfaces.INrpeComponentInfo"
-		/>
+            <!-- Datasource Info -->
+            <adapter factory=".info.NrpeComponentDataSourceInfo"
+                for=".datasources.NrpeComponentDataSource.NrpeComponentDataSource"
+                provides=".interfaces.INrpeComponentDataSourceInfo"
+            />
+            <utility provides="zope.schema.interfaces.IVocabularyFactory"
+                component=".info.NrpeComponentRedirectVocabulary"
+                name="NrpeComponentRedirectVocabulary"
+            />
+            <subscriber zcml:condition="installed ZenPacks.zenoss.DistributedCollector.interfaces"
+                for="ZenPacks.zenoss.DistributedCollector.DistributedPerformanceConf.DistributedPerformanceConf
+                     ZenPacks.zenoss.DistributedCollector.interfaces.ICollectorInstalled"
+                handler=".onCollectorInstalled"
+            />
+            <!-- Component Info -->
+            <adapter factory=".info.NrpeComponentInfo"
+                for=".NrpeComponent.NrpeComponent"
+                provides=".interfaces.INrpeComponentInfo"
+            />
+    
+            <!-- Import directRouter Directive -->
+            <include package="Products.ZenUtils.extdirect.zope" file="meta.zcml"/>
+    
+            <browser:directRouter
+                name="zenNrpeComponent_router"
+                for="*"
+                class=".routers.zenNrpeComponentRouter"
+                namespace="Zenoss.remote"
+                permission="zenoss.View"
+            />
+    
+            <adapter
+                name="zenNrpeComponentAdapter"
+                provides=".interfaces.IzenNrpeComponentFacade"
+                for="*"
+                factory=".facades.zenNrpeComponentFacade"
+            />
+                
+            <!-- Javascript stuff -->
+            <browser:resourceDirectory
+                    name="zenNrpeComponent"
+                    directory="resources"
+            />
+                
+            <browser:viewlet
+                name="js-zenNrpeComponent"
+                paths="/++resource++zenNrpeComponent/nrpecomponent.js"
+                weight="10"
+                manager="Products.ZenUI3.browser.interfaces.IJavaScriptSrcManager"
+                class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
+                permission="zope2.Public"
+            />
+            
+            <browser:viewlet
+                  name="component-add-menu-nrpecomponent"
+                  paths="/++resource++zenNrpeComponent/nrpecomponent-add.js"
+                  weight="9"
+                  for="Products.ZenModel.Device.Device"
+                  manager="Products.ZenUI3.browser.interfaces.IHeadExtraManager"
+                  class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
+                  permission="zope2.Public"
+            />
 
-    	<!-- Import directRouter Directive -->
-    	<include package="Products.ZenUtils.extdirect.zope" file="meta.zcml"/>
-
-	    <browser:directRouter
-	        name="zenNrpeComponent_router"
-	        for="*"
-	        class=".routers.zenNrpeComponentRouter"
-	        namespace="Zenoss.remote"
-	        permission="zenoss.View"
-	    />
-
-    	<adapter
-        	name="zenNrpeComponentAdapter"
-        	provides=".interfaces.IzenNrpeComponentFacade"
-        	for="*"
-        	factory=".facades.zenNrpeComponentFacade"
-        />
         
-		<!-- Javascript stuff -->
-		<browser:resourceDirectory
-				name="zenNrpeComponent"
-				directory="resources"
-		/>
-		
-		<browser:viewlet
-			name="js-zenNrpeComponent"
-			paths="/++resource++zenNrpeComponent/nrpecomponent.js"
-			weight="10"
-			manager="Products.ZenUI3.browser.interfaces.IJavaScriptSrcManager"
-			class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
-			permission="zope2.Public"
-		/>
-	
-      <browser:viewlet
-          name="component-add-menu-nrpecomponent"
-          paths="/++resource++zenNrpeComponent/nrpecomponent-add.js"
-          weight="9"
-          for="Products.ZenModel.Device.Device"
-          manager="Products.ZenUI3.browser.interfaces.IHeadExtraManager"
-          class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
-          permission="zope2.Public"
-          />
-
-	</configure>
-</configure>
-
+        </configure>
+    </configure>
 

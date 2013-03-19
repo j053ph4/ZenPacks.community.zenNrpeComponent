@@ -1,48 +1,50 @@
 import Globals
 from Products.ZenModel.ZenPack import ZenPack as ZenPackBase
 from Products.ZenUtils.Utils import unused
-import os,re
-
+from Definition import *
+from ZenPacks.community.ConstructionKit.Construct import *
+#import os,re,new
 unused(Globals)
+
+c = Construct(Definition)
+
 """ Add device relations
 """
-from Products.ZenRelations.RelSchema import *
+from Products.ZenModel.OperatingSystem import OperatingSystem
 from Products.ZenModel.Device import Device
-Device._relations += (('nrpeComponents', ToManyCont(ToOne,'ZenPacks.community.zenNrpeComponent.NrpeComponent','nrpeDevice')),)
+OperatingSystem._relations += c.deviceToComponent
+setattr(Device, c.addMethodName, stringToMethod(c.addMethodName, c.addMethod))
 
-from Products.ZenUtils.Utils import monkeypatch,prepId
-
-@monkeypatch('Products.ZenModel.Device.Device')
-def manage_addNrpeComponent(self, nrpeSSL=True, nrpeCommand='check_users', nrpeFlag='-u', nrpeArgs=[], nrpeEventComponent='NRPE'):
-    """make a nrpe component"""
-    from NrpeComponent import NrpeComponent
-    
-    newId = self.id + '_' + re.sub('[^A-Za-z0-9]+', '', nrpeCommand) + '_' + re.sub('[^A-Za-z0-9]+', '', nrpeEventComponent)
-    #for arg in nrpeArgs:
-    #    newId += '_'+ re.sub('[^A-Za-z0-9]+', '', arg) 
-    compid = prepId(newId)
-    nrpecomponent = NrpeComponent(compid)
-    self.nrpeComponents._setObject(nrpecomponent.id, nrpecomponent)
-    nrpecomponent = self.nrpeComponents._getOb(nrpecomponent.id)
-    nrpecomponent.nrpeHost = self.manageIp
-    nrpecomponent.nrpeSSL = nrpeSSL
-    nrpecomponent.nrpeCommand = nrpeCommand
-    nrpecomponent.nrpeFlag = nrpeFlag
-    nrpecomponent.nrpeArgs = nrpeArgs
-    nrpecomponent.nrpeEventComponent = nrpeEventComponent
-    return nrpecomponent
+# copied from HttpMonitor
+def onCollectorInstalled(ob, event):
+    zpFriendly = Definition.componentClass
+    errormsg = '{0} binary cannot be found on {1}. This is part of the nagios-plugins ' + \
+               'dependency, and must be installed before {2} can function.'
+    verifyBin = Definition.cmdFile
+    code, output = ob.executeCommand('zenbincheck %s' % verifyBin, 'zenoss', needsZenHome=True)
+    if code:
+        log.warn(errormsg.format(verifyBin, ob.hostname, zpFriendly))
 
 class ZenPack(ZenPackBase):
-    """ NRPE Component
+    """ Zenpack install
     """
-
-    def install(self, app):
-        ZenPackBase.install(self, app)
+    packZProperties = c.d.packZProperties
+    
+    def updateRelations(self):
         for d in self.dmd.Devices.getSubDevices():
-            d.buildRelations()
-
+            d.os.buildRelations()
+            
+    def install(self, app):
+        c.buildZenPackFiles()
+        ZenPackBase.install(self, app)
+        self.updateRelations()
+        
+    def upgrade(self, app):
+        c.buildZenPackFiles()
+        ZenPackBase.upgrade(self, app)
+        self.updateRelations()
+            
     def remove(self, app, leaveObjects=False):
         ZenPackBase.remove(self, app, leaveObjects)
-        Device._relations = tuple([x for x in Device._relations if x[0] not in ('nrpeComponents')])
-        for d in self.dmd.Devices.getSubDevices():
-            d.buildRelations()
+        OperatingSystem._relations = tuple([x for x in OperatingSystem._relations if x[0] not in (c.relname)])
+        self.updateRelations()
