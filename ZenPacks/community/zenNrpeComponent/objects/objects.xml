@@ -28,34 +28,34 @@ ${here/eventKey}
 <property type="int" id="cycletime" mode="w" >
 300
 </property>
-<property type="int" id="cycletime" mode="w" >
+<property switch="None" type="int" id="cycletime" mode="w" >
 300
 </property>
-<property type="string" id="hostname" mode="w" >
+<property switch="-H" type="string" id="hostname" mode="w" >
 ${here/hostname}
 </property>
-<property type="boolean" id="treatTimeout" mode="w" >
-${here/treatTimeout}
+<property switch="-u" type="boolean" id="treatTimeout" mode="w" >
+True
 </property>
-<property type="boolean" id="ssl" mode="w" >
-${here/ssl}
+<property switch="-n" type="boolean" id="ssl" mode="w" >
+True
 </property>
-<property type="string" id="eventComponent" mode="w" >
+<property switch="None" type="string" id="eventComponent" mode="w" >
 ${here/eventComponent}
 </property>
-<property type="string" id="command" mode="w" >
+<property switch="-c" type="string" id="command" mode="w" >
 ${here/command}
 </property>
-<property type="string" id="eventKey" mode="w" >
+<property switch="None" type="string" id="eventKey" mode="w" >
 ${here/eventKey}
 </property>
-<property type="string" id="timeout" mode="w" >
+<property switch="-t" type="string" id="timeout" mode="w" >
 60
 </property>
-<property type="string" id="arglist" mode="w" >
+<property switch="-a" type="list" id="arglist" mode="w" >
 ${here/arglist}
 </property>
-<property type="string" id="port" mode="w" >
+<property switch="-p" type="string" id="port" mode="w" >
 ${here/port}
 </property>
 </object>
