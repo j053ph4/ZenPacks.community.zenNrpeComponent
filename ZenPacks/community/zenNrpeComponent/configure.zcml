@@ -5,59 +5,51 @@
         xmlns:zcml="http://namespaces.zope.org/zcml">
         <configure zcml:condition="installed Products.Zuul">
 
-            <!-- Datasource Info -->
-            <adapter factory=".info.NrpeComponentDataSourceInfo"
-                for=".datasources.NrpeComponentDataSource.NrpeComponentDataSource"
-                provides=".interfaces.INrpeComponentDataSourceInfo"
-            />
-            <utility provides="zope.schema.interfaces.IVocabularyFactory"
-                component=".info.NrpeComponentRedirectVocabulary"
-                name="NrpeComponentRedirectVocabulary"
-            />
-            <subscriber zcml:condition="installed ZenPacks.zenoss.DistributedCollector.interfaces"
-                for="ZenPacks.zenoss.DistributedCollector.DistributedPerformanceConf.DistributedPerformanceConf
-                     ZenPacks.zenoss.DistributedCollector.interfaces.ICollectorInstalled"
-                handler=".onCollectorInstalled"
-            />
-            <!-- Component Info -->
-            <adapter factory=".info.NrpeComponentInfo"
-                for=".NrpeComponent.NrpeComponent"
-                provides=".interfaces.INrpeComponentInfo"
-            />
-    
-            <!-- Import directRouter Directive -->
             <include package="Products.ZenUtils.extdirect.zope" file="meta.zcml"/>
-    
+
+
+            <!-- ZenPack Info -->
+
             <browser:directRouter
                 name="zenNrpeComponent_router"
                 for="*"
-                class=".routers.zenNrpeComponentRouter"
+                class="ZenPacks.community.zenNrpeComponent.routers.zenNrpeComponentRouter"
                 namespace="Zenoss.remote"
                 permission="zenoss.View"
             />
     
             <adapter
                 name="zenNrpeComponentAdapter"
-                provides=".interfaces.IzenNrpeComponentFacade"
+                provides="ZenPacks.community.zenNrpeComponent.interfaces.IzenNrpeComponentFacade"
                 for="*"
-                factory=".facades.zenNrpeComponentFacade"
+                factory="ZenPacks.community.zenNrpeComponent.facades.zenNrpeComponentFacade"
             />
                 
-            <!-- Javascript stuff -->
             <browser:resourceDirectory
                     name="zenNrpeComponent"
                     directory="resources"
             />
-                
+
+            <!-- Component Info -->
+            <adapter factory="ZenPacks.community.zenNrpeComponent.info.NrpeComponentInfo"
+                for="ZenPacks.community.zenNrpeComponent.NrpeComponent.NrpeComponent"
+                provides="ZenPacks.community.zenNrpeComponent.interfaces.INrpeComponentInfo"
+            />
+    
             <browser:viewlet
-                name="js-zenNrpeComponent"
+                name="js-NrpeComponent"
                 paths="/++resource++zenNrpeComponent/nrpecomponent.js"
                 weight="10"
                 manager="Products.ZenUI3.browser.interfaces.IJavaScriptSrcManager"
                 class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
                 permission="zope2.Public"
             />
-            
+
+            <utility provides="zope.schema.interfaces.IVocabularyFactory"
+                component=".info.NrpeComponentgetEventClassesVocabulary"
+                name="NrpeComponentgetEventClasses"
+            />
+
             <browser:viewlet
                   name="component-add-menu-nrpecomponent"
                   paths="/++resource++zenNrpeComponent/nrpecomponent-add.js"
@@ -68,7 +60,23 @@
                   permission="zope2.Public"
             />
 
-        
+            <!-- Datasource Info -->
+            <adapter factory="ZenPacks.community.zenNrpeComponent.info.NrpeComponentDataSourceInfo"
+                for="ZenPacks.community.zenNrpeComponent.datasources.NrpeComponentDataSource.NrpeComponentDataSource"
+                provides="ZenPacks.community.zenNrpeComponent.interfaces.INrpeComponentDataSourceInfo"
+            />
+
+            <utility provides="zope.schema.interfaces.IVocabularyFactory"
+                component=".info.NrpeComponentRedirectVocabulary"
+                name="NrpeComponentRedirectVocabulary"
+            />
+
+            <subscriber zcml:condition="installed ZenPacks.zenoss.DistributedCollector.interfaces"
+                for="ZenPacks.zenoss.DistributedCollector.DistributedPerformanceConf.DistributedPerformanceConf
+                     ZenPacks.zenoss.DistributedCollector.interfaces.ICollectorInstalled"
+                handler=".onCollectorInstalledNrpeComponent"
+            />
+
         </configure>
     </configure>
 

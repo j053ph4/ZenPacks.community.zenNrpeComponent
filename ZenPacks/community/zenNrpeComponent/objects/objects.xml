@@ -28,36 +28,102 @@ ${here/eventKey}
 <property type="int" id="cycletime" mode="w" >
 300
 </property>
-<property switch="None" type="int" id="cycletime" mode="w" >
-300
-</property>
-<property switch="-H" type="string" id="hostname" mode="w" >
-${here/hostname}
-</property>
-<property switch="-u" type="boolean" id="treatTimeout" mode="w" >
-True
-</property>
-<property switch="-n" type="boolean" id="ssl" mode="w" >
-True
-</property>
-<property switch="None" type="string" id="eventComponent" mode="w" >
-${here/eventComponent}
+<property switch="-a" type="list" id="arglist" mode="w" >
+${here/arglist}
 </property>
 <property switch="-c" type="string" id="command" mode="w" >
 ${here/command}
 </property>
-<property switch="None" type="string" id="eventKey" mode="w" >
-${here/eventKey}
+<property switch="None" type="int" id="cycletime" mode="w" >
+300
 </property>
-<property switch="-t" type="string" id="timeout" mode="w" >
-60
+<property switch="None" type="string" id="eventComponent" mode="w" >
+${here/eventComponent}
 </property>
-<property switch="-a" type="list" id="arglist" mode="w" >
-${here/arglist}
+<property switch="-H" type="string" id="hostname" mode="w" >
+${here/hostname}
 </property>
 <property switch="-p" type="string" id="port" mode="w" >
 ${here/port}
 </property>
+<property switch="-n" type="boolean" id="ssl" mode="w" >
+True
+</property>
+<property switch="-t" type="int" id="timeout" mode="w" >
+60
+</property>
+<property switch="-u" type="boolean" id="treatTimeout" mode="w" >
+True
+</property>
+<tomanycont id='datapoints'>
+<object id='count' module='Products.ZenModel.RRDDataPoint' class='RRDDataPoint'>
+<property select_variable="rrdtypes" type="selection" id="rrdtype" mode="w" >
+GAUGE
+</property>
+<property type="boolean" id="isrow" mode="w" >
+True
+</property>
+</object>
+</tomanycont>
+</object>
+</tomanycont>
+<tomanycont id='graphDefs'>
+<object id='Count' module='Products.ZenModel.GraphDefinition' class='GraphDefinition'>
+<property type="int" id="height" mode="w" >
+100
+</property>
+<property type="int" id="width" mode="w" >
+500
+</property>
+<property type="boolean" id="log" mode="w" >
+False
+</property>
+<property type="boolean" id="base" mode="w" >
+False
+</property>
+<property type="int" id="miny" mode="w" >
+-1
+</property>
+<property type="int" id="maxy" mode="w" >
+-1
+</property>
+<property type="boolean" id="hasSummary" mode="w" >
+True
+</property>
+<property type="long" id="sequence" mode="w" >
+0
+</property>
+<tomanycont id='graphPoints'>
+<object id='count' module='Products.ZenModel.DataPointGraphPoint' class='DataPointGraphPoint'>
+<property type="long" id="sequence" mode="w" >
+0
+</property>
+<property select_variable="lineTypes" type="selection" id="lineType" mode="w" >
+LINE
+</property>
+<property type="long" id="lineWidth" mode="w" >
+1
+</property>
+<property type="boolean" id="stacked" mode="w" >
+False
+</property>
+<property type="string" id="format" mode="w" >
+%5.2lf%s
+</property>
+<property type="string" id="legend" mode="w" >
+${graphPoint/id}
+</property>
+<property type="long" id="limit" mode="w" >
+-1
+</property>
+<property type="string" id="dpName" mode="w" >
+checkNRPE_count
+</property>
+<property type="string" id="cFunc" mode="w" >
+AVERAGE
+</property>
+</object>
+</tomanycont>
 </object>
 </tomanycont>
 </object>
