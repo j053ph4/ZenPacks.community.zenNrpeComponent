@@ -14,7 +14,7 @@ def addArgs(ob, context, data={}):
         parts.append('%s \"%s\"' % (data['arglist']['switch'], '\" \"'.join(values)))
     return parts
 
-DATA = {
+NrpeDefinition = type('NrpeDefinition', (BasicDefinition,), {
         'version' : Version(2, 2, 0),
         'zenpackbase': "zenNrpeComponent",
         'component' : 'NrpeComponent',
@@ -27,6 +27,7 @@ DATA = {
                     'hostname' : addProperty('Hostname or IP','Basic','id', switch='-H',override=True, isReference=True),
                     'port' : addProperty('Port','Basic','5666', switch='-p'),
                     'ssl' : addProperty('Disable SSL','Basic',False,'boolean', switch='-n'),
+                    'timeout' : addProperty('Timeout','Basic','30',switch='-t'),
                     'command': addProperty('Plugin Command','Basic','check_log',switch='-c',optional='false'),
                     'arglist': addProperty('Arguments','Basic','path/to/log\n0\nstring_to_find','list',switch='-a'),
                     'treatTimeout' : addProperty('Timeout UNKNOWN instead of CRITICAL','Miscellaneous',False,'boolean', switch='-u'),
@@ -34,12 +35,19 @@ DATA = {
                     'eventClass' : getEventClass('/Cmd/Fail'),
                     },
               },
+        'componentMethods': [],
         'cmdFile':'check_nrpe',
         'addManual' : True,
         'createDS' : True,
         'ignoreKeys' : ['arglist'],
         'datasourceMethods' : [addArgs],
+        'saveOld': True,
+        'loadOld': True,
         }
+)
 
-NrpeDefinition = type('NrpeDefinition', (BasicDefinition,), DATA)
+addDefinitionSelfComponentRelation(NrpeDefinition,
+                          'nrpecomponents', ToMany, 'ZenPacks.community.zenNrpeComponent.NrpeComponent','port',
+                          'ipservice',  ToOne, 'Products.ZenModel.IpService', 'port',
+                          'IP Service', 'port')
 

@@ -9,7 +9,11 @@
             return ob;
         }
     }
-
+    
+    function pass_link(ob){ 
+        return ob; 
+    }
+    
     ZC.NrpeComponentPanel = Ext.extend(ZC.ComponentGridPanel, {
         constructor: function(config) {
             config = Ext.applyIf(config||{}, {
@@ -33,6 +37,9 @@
                     }, 
                     {
                         "name": "eventComponent"
+                    }, 
+                    {
+                        "name": "getIpserviceLink"
                     }, 
                     {
                         "name": "usesMonitorAttribute"
@@ -65,18 +72,28 @@
                         "dataIndex": "name"
                     }, 
                     {
-                        "header": "Plugin Command", 
-                        "width": 120, 
                         "sortable": "true", 
+                        "width": 120, 
+                        "header": "Plugin Command", 
+                        "renderer": "pass_link", 
                         "id": "command", 
                         "dataIndex": "command"
                     }, 
                     {
-                        "header": "Alias", 
-                        "width": 120, 
                         "sortable": "true", 
+                        "width": 120, 
+                        "header": "Alias", 
+                        "renderer": "pass_link", 
                         "id": "eventComponent", 
                         "dataIndex": "eventComponent"
+                    }, 
+                    {
+                        "sortable": "true", 
+                        "width": 120, 
+                        "header": "IP Service", 
+                        "renderer": "pass_link", 
+                        "id": "getIpserviceLink", 
+                        "dataIndex": "getIpserviceLink"
                     }, 
                     {
                         "header": "Monitored", 

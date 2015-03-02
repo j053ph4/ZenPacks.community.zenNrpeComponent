@@ -49,7 +49,7 @@ ${here/port}
 <property switch="-n" type="boolean" id="ssl" mode="w" >
 True
 </property>
-<property switch="-t" type="int" id="timeout" mode="w" >
+<property switch="-t" type="string" id="timeout" mode="w" >
 60
 </property>
 <property switch="-u" type="boolean" id="treatTimeout" mode="w" >
