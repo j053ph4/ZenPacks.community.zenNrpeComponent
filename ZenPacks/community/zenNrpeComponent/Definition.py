@@ -33,6 +33,7 @@ NrpeDefinition = type('NrpeDefinition', (BasicDefinition,), {
                     'treatTimeout' : addProperty('Timeout UNKNOWN instead of CRITICAL','Miscellaneous',False,'boolean', switch='-u'),
                     'eventComponent' : addProperty('Alias','Display Settings','Remote Plugin',optional='false'),
                     'eventClass' : getEventClass('/Cmd/Fail'),
+                    'productKey' : getProductClass('Nagios'),
                     },
               },
         'componentMethods': [],
