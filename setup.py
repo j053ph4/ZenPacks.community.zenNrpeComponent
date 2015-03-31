@@ -5,7 +5,7 @@
 NAME = "ZenPacks.community.zenNrpeComponent"
 VERSION = "2.2"
 AUTHOR = "Joseph Anderson"
-LICENSE = "GPLv2+"
+LICENSE = "Apache"
 NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.community']
 PACKAGES = ['ZenPacks', 'ZenPacks.community', 'ZenPacks.community.zenNrpeComponent']
 INSTALL_REQUIRES = ['ZenPacks.community.ConstructionKit']
